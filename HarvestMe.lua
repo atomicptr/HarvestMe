@@ -2,14 +2,14 @@ require "Window"
 
 local HarvestMe = {}
 
+local MAX_HARVEST_DISTANCE = 200
+
 local HARVEST_TYPE = "Harvest"
 local HOUSING_PLANT_TYPE = "HousingPlant"
 
 local FERTILE_GROUND_EN = "Fertile Ground"
 local FERTILE_GROUND_DE = "Fruchtbarer Boden"
 local FERTILE_GROUND_FR = "Je mange une femme"
-
-local DEBUG_MODE = true
 
 function HarvestMe:new(o)
     o = o or {}
@@ -35,7 +35,6 @@ function HarvestMe:OnLoad()
     Apollo.RegisterEventHandler("UnitCreated", "OnUnitCreated", self)
     Apollo.RegisterEventHandler("UnitDestroyed", "OnUnitDestroyed", self)
     Apollo.RegisterEventHandler("ChangeWorld", "OnChangeWorld", self)
-    Apollo.RegisterEventHandler("TargetUnitChanged", "OnTargetUnitChanged", self)
 
     Apollo.CreateTimer("HarvestRefresh", 0.1, true)
     Apollo.RegisterTimerHandler("HarvestRefresh", "OnTimerRefreshed", self)
@@ -74,18 +73,6 @@ function HarvestMe:OnChangeWorld()
     self:ClearPlates()
 end
 
-function HarvestMe:OnTargetUnitChanged(unit)
-    if DEBUG_MODE then
-        if unit ~= nil then
-            local harvestable = "No"
-            if unit:CanBeHarvestedBy(self.player) then
-                harvestable = "Yes"
-            end
-            Print(unit:GetType().." "..unit:GetName().." "..unit:GetId().." Harvestable: "..harvestable)
-        end
-    end
-end
-
 function HarvestMe:OnTimerRefreshed()
     if self.player == nil then
         self.player = GameLib.GetPlayerUnit()
@@ -98,7 +85,7 @@ end
 
 function HarvestMe:AddPlate(id)
     local unit = self.units[id]
-    local plate = Apollo.LoadForm(self.form, "Nameplate", "InWorldHudStratum", self)
+    local plate = Apollo.LoadForm(self.form, "HarvestingPlate", "InWorldHudStratum", self)
 
     plate:SetUnit(unit)
 
@@ -168,7 +155,7 @@ function HarvestMe:IsNearPlayer(id)
 
     local distance = math.sqrt(math.pow(player.x - unit.x, 2) + math.pow(player.y - unit.y, 2) + math.pow(player.z - unit.z, 2))
 
-    return distance <= 200
+    return distance <= MAX_HARVEST_DISTANCE
 end
 
 function HarvestMe:PaintTypePlate(id, color)
