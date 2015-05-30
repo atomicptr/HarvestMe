@@ -45,9 +45,10 @@ function HarvestMe:OnUnitCreated(unit)
     local id = unit:GetId()
     local name = unit:GetName()
 
-    local isNotFertileGround = name ~= FERTILE_GROUND_EN and name ~= FERTILE_GROUND_DE and name ~= FERTILE_GROUND_FR
+    local isHarvestType = type == HARVEST_TYPE or type == HOUSING_PLANT_TYPE
+    local isFertileGround = name == FERTILE_GROUND_EN or name == FERTILE_GROUND_DE or name == FERTILE_GROUND_FR
 
-    if type == HARVEST_TYPE or type == HOUSING_PLANT_TYPE and isNotFertileGround then
+    if isHarvestType and not isFertileGround then
         -- remember unit
         self.units[id] = unit
 
