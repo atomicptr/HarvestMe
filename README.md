@@ -6,11 +6,11 @@ Wildstar Addon, inspired by the [Harvest Plates addon by Garet Jax](https://foru
 
 ## Screenshot
 
-![screenshots/01.png]
-![screenshots/02.png]
+![1](screenshots/01.png)
+![2](screenshots/02.png)
 
 ## License
 
 MIT
 
-![screenshots/makeitrain.gif]
+![makeitrain](screenshots/makeitrain.gif)
