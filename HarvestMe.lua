@@ -9,7 +9,7 @@ local HOUSING_PLANT_TYPE = "HousingPlant"
 
 local FERTILE_GROUND_EN = "Fertile Ground"
 local FERTILE_GROUND_DE = "Fruchtbarer Boden"
-local FERTILE_GROUND_FR = "Je mange une femme"
+local FERTILE_GROUND_FR = "Lance de l'âme"
 
 function HarvestMe:new(o)
     o = o or {}
