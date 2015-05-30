@@ -22,6 +22,8 @@ function HarvestMe:new(o)
     self.units = {}
     self.target = nil
 
+    self.housingBacklog = {}
+
     return o
 end
 
@@ -46,9 +48,12 @@ function HarvestMe:OnUnitCreated(unit)
     local name = unit:GetName()
 
     local isHarvestType = type == HARVEST_TYPE or type == HOUSING_PLANT_TYPE
-    local isFertileGround = name == FERTILE_GROUND_EN or name == FERTILE_GROUND_DE or name == FERTILE_GROUND_FR
 
-    if isHarvestType and not isFertileGround then
+    if type == HOUSING_PLANT_TYPE then
+        self.housingBacklog[id] = unit
+    end
+
+    if isHarvestType and not self:IsFertileGround(name) then
         -- remember unit
         self.units[id] = unit
 
@@ -79,6 +84,16 @@ function HarvestMe:OnTimerRefreshed()
         self.player = GameLib.GetPlayerUnit()
     end
 
+    -- hack which fixes a problem with tracking housing plants
+    for id, unit in pairs(self.housingBacklog) do
+        local name = unit:GetName()
+
+        if not self:IsFertileGround(name) and self.plates[id] == nil then
+            self:OnUnitCreated(unit)
+        end
+    end
+
+    -- update plates
     for id in pairs(self.plates) do
         self:UpdatePlate(id)
     end
@@ -161,6 +176,10 @@ end
 
 function HarvestMe:PaintTypePlate(id, color)
     self.plates[id]:FindChild("HarvestType"):SetTextColor(color)
+end
+
+function HarvestMe:IsFertileGround(name)
+    return name == FERTILE_GROUND_EN or name == FERTILE_GROUND_DE or name == FERTILE_GROUND_FR
 end
 
 local HarvestMeInst = HarvestMe:new()
