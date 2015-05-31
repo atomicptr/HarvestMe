@@ -2,6 +2,7 @@ require "Window"
 
 local HarvestMe = {}
 
+local REFRESH_TIME = 0.2
 local MAX_HARVEST_DISTANCE = 200
 
 local HARVEST_TYPE = "Harvest"
@@ -10,6 +11,9 @@ local HOUSING_PLANT_TYPE = "HousingPlant"
 local FERTILE_GROUND_EN = "Fertile Ground"
 local FERTILE_GROUND_DE = "Fruchtbarer Boden"
 local FERTILE_GROUND_FR = "Lance de l'âme"
+
+local COLOR_HARVESTABLE = "white"
+local COLOR_NOT_HARVESTABLE = "red"
 
 function HarvestMe:new(o)
     o = o or {}
@@ -38,7 +42,7 @@ function HarvestMe:OnLoad()
     Apollo.RegisterEventHandler("UnitDestroyed", "OnUnitDestroyed", self)
     Apollo.RegisterEventHandler("ChangeWorld", "OnChangeWorld", self)
 
-    Apollo.CreateTimer("HarvestRefresh", 0.1, true)
+    Apollo.CreateTimer("HarvestRefresh", REFRESH_TIME, true)
     Apollo.RegisterTimerHandler("HarvestRefresh", "OnTimerRefreshed", self)
 end
 
@@ -130,11 +134,15 @@ function HarvestMe:UpdatePlate(id)
     local isVisible = self:ShouldBeVisible(id)
     self.plates[id]:FindChild("Container"):Show(isVisible)
 
-    -- if is not harvestable paint type red
-    if self.player ~= nil and not self.units[id]:CanBeHarvestedBy(self.player) then
-        -- for some reasons housing plants are not marked as "Harvestable"
-        if self.units[id]:GetType() ~= HOUSING_PLANT_TYPE then
-            self:PaintTypePlate(id, "red")
+    if self.player ~= nil then
+        -- if is not harvestable paint type red
+        if not self.units[id]:CanBeHarvestedBy(self.player) then
+            -- for some reasons housing plants are not marked as "Harvestable"
+            if self.units[id]:GetType() ~= HOUSING_PLANT_TYPE then
+                self:PaintTypePlate(id, COLOR_NOT_HARVESTABLE)
+            end
+        else
+            self:PaintTypePlate(id, COLOR_HARVESTABLE)
         end
     end
 end
