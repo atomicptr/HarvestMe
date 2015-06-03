@@ -1,0 +1,8 @@
+package-as: HarvestMe
+enable-nolib-creation: no
+
+ignore:
+    - screenshots
+    - README.md
+
+license-output: LICENSE
