@@ -112,7 +112,7 @@ function HarvestMe:AddPlate(id)
     local tradeskill = unit:GetHarvestRequiredTradeskillName()
     local tradeskillTier = unit:GetHarvestRequiredTradeskillTier()
 
-    if unit:GetType() == HARVEST_TYPE and tradeskill ~= "Farmer" then
+    if unit:GetType() == HARVEST_TYPE and tradeskillTier ~= nil and tradeskill ~= "Farmer" then
         tradeskill = tradeskill.." ("..tradeskillTier..")"
     elseif unit:GetType() == HOUSING_PLANT_TYPE then
         tradeskill = "Farmer"
