@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Addon Author="kasoki" APIVersion="12" Name="HarvestMe" Description="Nameplates for all harvest stuff.">
+<Addon Author="kasoki" APIVersion="13" Name="HarvestMe" Description="Nameplates for all harvest stuff.">
     <Script Name="HarvestMe.lua"/>
     <Form Name="HarvestMe.xml"/>
 </Addon>
